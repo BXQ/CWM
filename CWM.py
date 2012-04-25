@@ -6,7 +6,7 @@
 # Most of the program is based on details gleaned from
 # "Can You Make Yourself Smarter?"
 # by Dan Hurley, New York Times, 18 April, 2012
-# As well as "The generality of working memory capacity:
+# as well as "The generality of working memory capacity:
 # a latent-variable approach to verbal and visuospatial memory span and reasoning"
 # by Kane, et. al., J. Exp. Psychol. Gen., 2004
 #
