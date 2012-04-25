@@ -1,0 +1,36 @@
+CWM is a program to test and train complex working memory. 
+
+SETUP
+--------------
+This program requires Python (www.python.org) to run. If you use Mac or Linux, then it's probably already installed on your computer. If you use Windows, then it's probably not (unless you specifically installed it yourself). You can check by going to the commandline, typing "python" (without the quotes) and hitting enter. If an error message appears, then you should go to www.python.org/download/ to download and install the latest version of Python.
+
+
+On Mac and Linux, you can make the file executable by running the following command in your terminal:
+chmod +x CWM.py
+
+RUNNING
+--------------
+This program runs on the command line, so it open up your terminal to run it.
+First, navigate to the directory with CWM.py in it.
+On Mac and Linux, if you've followed the setup instructions, just type:
+./CWM.py
+and it should work.
+
+On all platforms, typing:
+python CWM.py 
+should also work.
+
+ABOUT
+--------------
+This program was written in Python 3 and requires Python to run. It has been tested and appears to work fine with Python 2.7.
+
+The program comes with onscreen instructions, but the task is as follows: the user will be prompted to determine the symmetry of a series of 3  8x8 patterns (pressing y if it is symmetrical, n if it is not). Then, the user will be shown a highlighted location in a 4x4 grid for 650ms, followed by a 500ms blank screen. This pattern will repeat a number of times, determined by the level that the user is at (initially, 2). Then, the user will be prompted to recall the previously shown locations in order.  After 2 successful trials in a row (in which all questions are answered correctly), the user will be prompoted to the next level. After 2 unsuccessful trials in a row, the user will be demoted a level. You may repeat as many trials as you wish, but if you quit the program, your level will be reset to the default of 2 when you restart it.
+
+AUTHOR
+--------------
+This program was written by Brandon Milholland.
+Send comments to brandon dot milholland at gmail dot com.
+
+COPYRIGHT
+--------------
+This program is distributed under the GNU Affero General Public License. See the file COPYING for the full license or visit www.gnu.org for more details.
