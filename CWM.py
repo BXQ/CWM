@@ -61,9 +61,9 @@ def main():
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
-                   result="Success"
+                result="Success"
             else:
-                   result="Fail"
+                result="Fail"
             log_entry = "".join([str(now.month).zfill(2),
                                 "/", str(now.day).zfill(2), ", ",
                                 str(now.year), " ",
@@ -116,7 +116,8 @@ def begin_prompt(level):
     printc("Press c to enter testing or q to quit.", stdscr, yoffset=1, pair=1)
     printc("Copyright (C) 2012: Brandon Milholland", stdscr, yoffset=10, pair=1)
     printc("Distributed under the GNU Affero General Public License", stdscr, yoffset=11, pair=1)
-    while(key != ord("c") and key != ord("q")):
+    commands = (ord("c"), ord("q")) #TODO: add command to see controls
+    while(key not in commands):
         key = stdscr.getch()
         if key == ord("c"):
             return True
@@ -136,17 +137,22 @@ def symmetry_tasks():
         key = ""
         printc("Is this pattern symmetrical?", stdscr, pair=1, yoffset=8)
         printc("y/n", stdscr, pair=1, yoffset=9)
-        while(key !=ord("y") and key!=ord("n")):
+        commands = (ord("y"), ord("n"), curses.KEY_LEFT, curses.KEY_RIGHT)
+        ans=""
+        while(key not in commands):
             key = stdscr.getch()
-            if key == ord("y"):
+            if key == ord("y") or key == curses.KEY_RIGHT:
                 result = result and symmetrical
+                ans="y"
+                    
                 
-            if key == ord("n"):
+            if key == ord("n") or key == curses.KEY_LEFT:
                 result = result and not symmetrical
+                ans="n"
                 
-            if (key == ord("y") and symmetrical) or (key == ord("n") and not symmetrical) :
+            if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical) :
                 printc("Right", stdscr, pair=1, yoffset=9)
-            elif key == ord("y") or key == ord("n"):
+            elif key in commands:
                 printc("Wrong", stdscr, pair=1, yoffset=9)
         time.sleep(.5)
         fill_window(stdscr, " ", pair=1)
