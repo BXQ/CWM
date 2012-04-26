@@ -231,7 +231,7 @@ def recall_prompt(locations):
     for loc in locations:
         fill_window(stdscr, " ", pair=1)
         printc("Where was location "+str(i)+"?", stdscr, pair=1)
-        printc("Use the arrow keys to move the star and press space to select.",
+        printc("Use the arrow keys to move the star and press space or enter to select.",
                stdscr, yoffset=5, pair=1)
         key = ""
         cursor_pos = [0, 0]
