@@ -186,7 +186,23 @@ def display_matrix(matrix):
         i += 1
 
 def generate_asymmetrical():
-    """Generates a matrix highly unlikely (<0.02%) to be symmetrical"""
+    """Generates a matrix guaranteed to be asymmetrical"""
+    matrix = rand_matrix()
+    while is_symmetrical(matrix):
+        matrix = rand_matrix()
+    return matrix
+    
+
+def is_symmetrical(matrix):
+    result = True
+    for i in range(8):
+        row = matrix[i*8:(i+1)*8]
+        result = result and (row[0:3] == row[4:])
+    return result
+                    
+    
+def rand_matrix():
+    """Generates a random matrix matrix highly unlikely (<0.02%) to be symmetrical"""
     matrix = list()
     for i in range(8):
         row = ""
