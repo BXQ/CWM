@@ -45,14 +45,18 @@ def main():
     parser.add_argument("-l","--log",
                         default="./.CWMlog",
                         type=argparse.FileType('a'))
+    parser.add_argument("-s", "--start",
+                        default=2, type=int)
     args=parser.parse_args()
     logfile=args.log
 
     fill_window(stdscr, " ", pair=1)
     prev_results = list()
     prev_trials = 0
-    
-    level = 2
+
+    if(args.start<1):
+           args.start=2
+    level = args.start
     while True:
         if not begin_prompt(level):
             return 0
@@ -116,7 +120,7 @@ def begin_prompt(level):
     printc("Press c to enter testing or q to quit.", stdscr, yoffset=1, pair=1)
     printc("Copyright (C) 2012: Brandon Milholland", stdscr, yoffset=10, pair=1)
     printc("Distributed under the GNU Affero General Public License", stdscr, yoffset=11, pair=1)
-    commands = (ord("c"), ord("q")) #TODO: add command to see controls
+    commands = (ord("c"), ord("q")) #TODO: add command to see controls and help
     while(key not in commands):
         key = stdscr.getch()
         if key == ord("c"):
