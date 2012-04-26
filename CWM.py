@@ -34,10 +34,20 @@
 import time
 import random
 import curses
+import argparse
+import datetime
 
 
 def main():
     """The main function of the program"""
+    
+    parser=argparse.ArgumentParser()
+    parser.add_argument("-l","--log",
+                        default="./.CWMlog",
+                        type=argparse.FileType('a'))
+    args=parser.parse_args()
+    logfile=args.log
+
     fill_window(stdscr, " ", pair=1)
     prev_results = list()
     prev_trials = 0
@@ -49,6 +59,19 @@ def main():
         else:
             prev_results.append(task(level))
             prev_trials += 1
+            now = datetime.datetime.now()
+            if prev_results[-1]:
+                   result="Success"
+            else:
+                   result="Fail"
+            log_entry = "".join([str(now.month).zfill(2),
+                                "/", str(now.day).zfill(2), ", ",
+                                str(now.year), " ",
+                                str(now.hour).zfill(2),
+                                ":", str(now.minute).zfill(2),
+                                ":", str(now.second).zfill(2), "\t", str(level), "\t", result, "\n"])
+            logfile.write(log_entry)
+            
             if prev_trials < 2:
                 level = 2
                 continue
