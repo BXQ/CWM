@@ -194,6 +194,7 @@ def generate_asymmetrical():
     
 
 def is_symmetrical(matrix):
+    """Checks if a matrix is symmetrical"""
     result = True
     for i in range(8):
         row = matrix[i*8:(i+1)*8]
