@@ -41,21 +41,21 @@ import datetime
 def main():
     """The main function of the program"""
     
-    parser=argparse.ArgumentParser()
-    parser.add_argument("-l","--log",
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-l", "--log",
                         default="./.CWMlog",
                         type=argparse.FileType('a'))
     parser.add_argument("-s", "--start",
                         default=2, type=int)
-    args=parser.parse_args()
-    logfile=args.log
+    args = parser.parse_args()
+    logfile = args.log
 
     fill_window(stdscr, " ", pair=1)
     prev_results = list()
     prev_trials = 0
     
     if(args.start<1):
-        args.start=2
+        args.start = 2
     level = args.start
 
     while True:
@@ -66,15 +66,16 @@ def main():
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
-                result="Success"
+                result = "Success"
             else:
-                result="Fail"
+                result = "Fail"
             log_entry = "".join([str(now.month).zfill(2),
                                 "/", str(now.day).zfill(2), ", ",
                                 str(now.year), "\t",
                                 str(now.hour).zfill(2),
                                 ":", str(now.minute).zfill(2),
-                                ":", str(now.second).zfill(2), "\t", str(level), "\t", result, "\n"])
+                                ":", str(now.second).zfill(2), "\t",
+                                 str(level), "\t", result, "\n"])
             logfile.write(log_entry)
             
             if prev_trials < 2:
@@ -118,9 +119,11 @@ def begin_prompt(level):
            stdscr, pair=1, yoffset=-10)
     printc("Current level: "+str(level), stdscr, pair=1)
     key = ""
-    printc("Press enter to begin testing, h for help or q to quit.", stdscr, yoffset=1, pair=1)
+    printc("Press enter to begin testing, h for help or q to quit.",
+           stdscr, yoffset=1, pair=1)
     printc("Copyright (C) 2012: Brandon Milholland", stdscr, yoffset=10, pair=1)
-    printc("Distributed under the GNU Affero General Public License", stdscr, yoffset=11, pair=1)
+    printc("Distributed under the GNU Affero General Public License",
+           stdscr, yoffset=11, pair=1)
     commands = (ord("c"), ord("q"), ord(" "), ord("\n"))
     cont_commands = (ord("c"), ord(" "), ord("\n"))
     while(key not in commands):
@@ -154,17 +157,17 @@ def symmetry_tasks():
         printc("Is this pattern symmetrical?", stdscr, pair=1, yoffset=8)
         printc("y/n", stdscr, pair=1, yoffset=9)
         commands = (ord("y"), ord("n"), curses.KEY_LEFT, curses.KEY_RIGHT)
-        ans=""
+        ans = ""
         while(key not in commands):
             key = stdscr.getch()
             if key == ord("y") or key == curses.KEY_RIGHT:
                 result = result and symmetrical
-                ans="y"
+                ans = "y"
                     
                 
             if key == ord("n") or key == curses.KEY_LEFT:
                 result = result and not symmetrical
-                ans="n"
+                ans = "n"
                 
             if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical) :
                 printc("Right", stdscr, pair=1, yoffset=9)
