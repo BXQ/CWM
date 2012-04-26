@@ -24,7 +24,13 @@ ABOUT
 --------------
 This program was written in Python 3 and requires Python to run. It has been tested and appears to work fine with Python 2.7.
 
-The program comes with onscreen instructions, but the task is as follows: the user will be prompted to determine the symmetry of a series of 3  8x8 patterns (pressing y if it is symmetrical, n if it is not). Then, the user will be shown a highlighted location in a 4x4 grid for 650ms, followed by a 500ms blank screen. This pattern will repeat a number of times, determined by the level that the user is at (initially, 2). Then, the user will be prompted to recall the previously shown locations in order.  After 2 successful trials in a row (in which all questions are answered correctly), the user will be prompoted to the next level. After 2 unsuccessful trials in a row, the user will be demoted a level. You may repeat as many trials as you wish, but if you quit the program, your level will be reset to the default of 2 when you restart it.
+The program comes with onscreen instructions, but the task is as follows: the user will be prompted to determine the symmetry of a series of 3  8x8 patterns (pressing y if it is symmetrical, n if it is not). Then, the user will be shown a highlighted location in a 4x4 grid for 650ms, followed by a 500ms blank screen. This pattern will repeat a number of times, determined by the level that the user is at. Then, the user will be prompted to recall the previously shown locations in order.  After 2 successful trials in a row (in which all questions are answered correctly), the user will be prompoted to the next level. After 2 unsuccessful trials in a row, the user will be demoted a level. Try to see what is the highest level you can get to!
+
+OPTIONS
+--------------
+Command line options for the program are as follows:
+-l, --log    Set the log file to which the results of trials are printed. The default is .CWMlog.
+-s, --start  Set the starting level (default is 2). This must be an integer >0.
 
 AUTHOR
 --------------
@@ -34,3 +40,4 @@ Send comments to brandon dot milholland at gmail dot com.
 COPYRIGHT
 --------------
 CWM is free software. You may copy, modify or distribute this program however you wish, as long as you include the copyright, license and source code. This program is distributed under the GNU Affero General Public License. See the file LICENSE for the full license or visit www.gnu.org for more details.
+
