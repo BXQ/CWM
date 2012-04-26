@@ -53,10 +53,11 @@ def main():
     fill_window(stdscr, " ", pair=1)
     prev_results = list()
     prev_trials = 0
-
+    
     if(args.start<1):
-           args.start=2
+        args.start=2
     level = args.start
+
     while True:
         if not begin_prompt(level):
             return 0
@@ -70,14 +71,14 @@ def main():
                 result="Fail"
             log_entry = "".join([str(now.month).zfill(2),
                                 "/", str(now.day).zfill(2), ", ",
-                                str(now.year), " ",
+                                str(now.year), "\t",
                                 str(now.hour).zfill(2),
                                 ":", str(now.minute).zfill(2),
                                 ":", str(now.second).zfill(2), "\t", str(level), "\t", result, "\n"])
             logfile.write(log_entry)
             
             if prev_trials < 2:
-                level = 2
+                level = args.start
                 continue
             if prev_results[-1] and prev_results[-2]:
                 level += 1
@@ -117,16 +118,27 @@ def begin_prompt(level):
            stdscr, pair=1, yoffset=-10)
     printc("Current level: "+str(level), stdscr, pair=1)
     key = ""
-    printc("Press c to enter testing or q to quit.", stdscr, yoffset=1, pair=1)
+    printc("Press enter to begin testing, h for help or q to quit.", stdscr, yoffset=1, pair=1)
     printc("Copyright (C) 2012: Brandon Milholland", stdscr, yoffset=10, pair=1)
     printc("Distributed under the GNU Affero General Public License", stdscr, yoffset=11, pair=1)
-    commands = (ord("c"), ord("q")) #TODO: add command to see controls and help
+    commands = (ord("c"), ord("q"), ord(" "), ord("\n"))
+    cont_commands = (ord("c"), ord(" "), ord("\n"))
     while(key not in commands):
         key = stdscr.getch()
-        if key == ord("c"):
+        if key in cont_commands:
             return True
         if key == ord("q"):
             return False
+        if key == ord("h"):
+            printc("This is a program to test and train your complex working memory.", stdscr, yoffset=2, pair=1)
+            printc("You will first be asked to determine if a series of patterns have left/right symmetry. Hit y or the right arrow key for yes, n or the left arrow key for no.", stdscr, yoffset=3, pair=1)
+            printc("After every three symmetry problems, you will be show the location of a star in a 4x4 grid and asked to remember it for later.", stdscr, yoffset=4, pair=1)
+            printc("This cycle will repeat itself a number of times, after which you will be asked to recall the locations of the stars in the order they were shown.", stdscr, yoffset=5, pair=1)
+            printc("Use the arrow keys to move around the star and press enter or the spacebar to select the location.", stdscr, yoffset=6, pair=1)
+            printc("Depending on how you perform, the program will automatically increase or decrease your level and the number of locations you are asked to remember.", stdscr, yoffset=7, pair=1)
+            printc("This will keep the task challenging but not overwhelming.", stdscr, yoffset=8, pair=1)
+            printc("Try to see how high you can get the level!", stdscr, yoffset=9, pair=1)
+            
         
 def symmetry_tasks():
     """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
@@ -222,7 +234,8 @@ def recall_prompt(locations):
         cursor_pos = [0, 0]
         rows, cols = stdscr.getmaxyx()
         upper_left = [rows//2+1, (cols-4)//2]
-        while key != ord(" "):
+        commands = (ord(" "), ord("\n"))
+        while key not in commands:
             for j in range(4):
                 printc(4*"O", stdscr, pair=1, yoffset=1+j)
             stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
