@@ -52,7 +52,7 @@ def main():
 
     fill_window(stdscr, " ", pair=1)
     prev_results = list()
-    prev_trials = 0
+    prev_trials = 0 #Previous trials *at the current level*
     
     if(args.start<1):
         args.start = 2
@@ -79,12 +79,14 @@ def main():
             logfile.write(log_entry)
             
             if prev_trials < 2:
-                level = args.start
+                
                 continue
             if prev_results[-1] and prev_results[-2]:
                 level += 1
+                prev_trials = 0
             if not (prev_results[-1] or prev_results[-2]):
                 level = max(1, level-1)
+                prev_trials = 0
 
 def fill_window(win, char, pair=0):
     """Fills window win with character char"""
@@ -169,7 +171,7 @@ def symmetry_tasks():
                 result = result and not symmetrical
                 ans = "n"
                 
-            if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical) :
+            if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical):
                 printc("Right", stdscr, pair=1, yoffset=9)
             elif key in commands:
                 printc("Wrong", stdscr, pair=1, yoffset=9)
