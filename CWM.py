@@ -64,7 +64,8 @@ def main():
         if not begin_prompt(level):
             return 0
         else:
-            prev_results.append(task(level, square=args.square, sym_square=args.sym_square))
+            prev_results.append(task(level,
+                                     square=args.square, sym_square=args.sym_square))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -136,14 +137,17 @@ def begin_prompt(level):
         if key == ord("q"):
             return False
         if key == ord("h"):
-            printc("This is a program to test and train your complex working memory.", stdscr, yoffset=2, pair=1)
+            printc("This is a program to test and train your complex working memory.",
+                   stdscr, yoffset=2, pair=1)
             printc("You will first be asked to determine if a series of patterns have left/right symmetry. Hit y or the right arrow key for yes, n or the left arrow key for no.", stdscr, yoffset=3, pair=1)
             printc("After every three symmetry problems, you will be show the location of a star in a 4x4 grid and asked to remember it for later.", stdscr, yoffset=4, pair=1)
             printc("This cycle will repeat itself a number of times, after which you will be asked to recall the locations of the stars in the order they were shown.", stdscr, yoffset=5, pair=1)
             printc("Use the arrow keys to move around the star and press enter or the spacebar to select the location.", stdscr, yoffset=6, pair=1)
             printc("Depending on how you perform, the program will automatically increase or decrease your level and the number of locations you are asked to remember.", stdscr, yoffset=7, pair=1)
-            printc("This will keep the task challenging but not overwhelming.", stdscr, yoffset=8, pair=1)
-            printc("Try to see how high you can get the level!", stdscr, yoffset=9, pair=1)
+            printc("This will keep the task challenging but not overwhelming.",
+                   stdscr, yoffset=8, pair=1)
+            printc("Try to see how high you can get the level!",
+                   stdscr, yoffset=9, pair=1)
             
         
 def symmetry_tasks(square=False):
@@ -211,7 +215,7 @@ def is_symmetrical(matrix):
                     
     
 def rand_matrix():
-    """Generates a random matrix matrix highly unlikely (<0.02%) to be symmetrical"""
+    """Generates a random matrix highly unlikely (<0.02%) to be symmetrical"""
     matrix = list()
     for i in range(8):
         row = ""
@@ -271,12 +275,14 @@ def recall_prompt(locations, square=False):
             if square:
                 for j in range(4):
                     printc(" ".join(4*"O"), stdscr, pair=1, yoffset=1+j)
-                    stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+2*cursor_pos[1]-1, "*", curses.color_pair(1))
+                    stdscr.addch(upper_left[0]+cursor_pos[0],
+                                 upper_left[1]+2*cursor_pos[1]-1, "*", curses.color_pair(1))
                     stdscr.refresh()
             else:
                 for j in range(4):
                     printc(4*"O", stdscr, pair=1, yoffset=1+j)
-                    stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
+                    stdscr.addch(upper_left[0]+cursor_pos[0],
+                                 upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
                     stdscr.refresh()
             key = stdscr.getch()
            
