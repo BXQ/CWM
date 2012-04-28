@@ -48,6 +48,7 @@ def main():
     parser.add_argument("-s", "--start",
                         default=2, type=int)
     parser.add_argument("--square", action="store_true")
+    parser.add_argument("--sym_square", action="store_true")
     args = parser.parse_args()
     logfile = args.log
 
@@ -63,7 +64,7 @@ def main():
         if not begin_prompt(level):
             return 0
         else:
-            prev_results.append(task(level, square=args.square))
+            prev_results.append(task(level, square=args.square, sym_square=args.sym_square))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -103,12 +104,12 @@ def printc(message, window, pair=0, yoffset=0, attribute=0, xoffset=0):
                   curses.color_pair(pair) | attribute)
     window.refresh()
                          
-def task(level, square=False):
+def task(level, square=False, sym_square=False):
     """Performs the complex working memory span task at a given level"""
     result = True
     locations = list()
     for i in range(level):
-        result =  symmetry_tasks() and result
+        result =  symmetry_tasks(square=sym_square) and result
         locations.append(random.randint(0, 15))
         display_location(locations[i], square=square)
     result = recall_prompt(locations, square=square) and result
@@ -145,15 +146,15 @@ def begin_prompt(level):
             printc("Try to see how high you can get the level!", stdscr, yoffset=9, pair=1)
             
         
-def symmetry_tasks():
+def symmetry_tasks(square=False):
     """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
     result = True
     for i in range(3):
         symmetrical = random.randint(0, 1)
         if symmetrical:
-            display_matrix(generate_symmetrical())
+            display_matrix(generate_symmetrical(), square=square)
         else:
-            display_matrix(generate_asymmetrical())
+            display_matrix(generate_asymmetrical(), square=square)
                                 
         key = ""
         printc("Is this pattern symmetrical?", stdscr, pair=1, yoffset=8)
@@ -179,13 +180,18 @@ def symmetry_tasks():
         fill_window(stdscr, " ", pair=1)
     return result
 
-def display_matrix(matrix):
+def display_matrix(matrix, square=False):
     """Displays a matrix in the center of stdscr"""
     fill_window(stdscr, " ", pair=1)
     i = 0
-    for row in matrix:
-        printc(row, stdscr, pair=1, yoffset=i)
-        i += 1
+    if square:
+        for row in matrix:
+            printc(" ".join(row), stdscr, pair=1, yoffset=i)
+            i += 1
+    else:
+        for row in matrix:
+            printc(row, stdscr, pair=1, yoffset=i)
+            i += 1
 
 def generate_asymmetrical():
     """Generates a matrix guaranteed to be asymmetrical"""
