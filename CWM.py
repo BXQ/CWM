@@ -47,6 +47,7 @@ def main():
                         type=argparse.FileType('a'))
     parser.add_argument("-s", "--start",
                         default=2, type=int)
+    parser.add_argument("--square", action="store_true")
     args = parser.parse_args()
     logfile = args.log
 
@@ -62,7 +63,7 @@ def main():
         if not begin_prompt(level):
             return 0
         else:
-            prev_results.append(task(level))
+            prev_results.append(task(level, square=args.square))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -79,7 +80,6 @@ def main():
             logfile.write(log_entry)
             
             if prev_trials < 2:
-                
                 continue
             if prev_results[-1] and prev_results[-2]:
                 level += 1
@@ -103,15 +103,15 @@ def printc(message, window, pair=0, yoffset=0, attribute=0, xoffset=0):
                   curses.color_pair(pair) | attribute)
     window.refresh()
                          
-def task(level):
+def task(level, square=False):
     """Performs the complex working memory span task at a given level"""
     result = True
     locations = list()
     for i in range(level):
         result =  symmetry_tasks() and result
         locations.append(random.randint(0, 15))
-        display_location(locations[i])
-    result = recall_prompt(locations) and result
+        display_location(locations[i], square=square)
+    result = recall_prompt(locations, square=square) and result
     return result
 
 def begin_prompt(level):
@@ -231,19 +231,23 @@ def generate_symmetrical():
         matrix.append(row)
     return matrix
 
-def display_location(location):
+def display_location(location, square=False):
     """Displays a location to be memorized"""
     fill_window(stdscr, " ", pair=1)
     printc("Remember the location of the star.", stdscr, pair=1)
     grid = 16*"O"
     grid = grid[0:location]+"*"+grid[location+1:]
-    for i in range(4):
-        printc(grid[i*4:(i+1)*4], stdscr, yoffset=1+i, pair=1)
+    if square:
+        for i in range(4):
+            printc(" ".join(grid[i*4:(i+1)*4]), stdscr, yoffset=1+i, pair=1)
+    else:
+        for i in range(4):
+            printc(grid[i*4:(i+1)*4], stdscr, yoffset=1+i, pair=1)
     time.sleep(.65)
     fill_window(stdscr, " ", pair=1)
     time.sleep(.5)
 
-def recall_prompt(locations):
+def recall_prompt(locations, square=False):
     """Prompts the user to recall a series of locations"""
     i = 1
     result = True
@@ -258,11 +262,18 @@ def recall_prompt(locations):
         upper_left = [rows//2+1, (cols-4)//2]
         commands = (ord(" "), ord("\n"))
         while key not in commands:
-            for j in range(4):
-                printc(4*"O", stdscr, pair=1, yoffset=1+j)
-            stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
-            stdscr.refresh()
+            if square:
+                for j in range(4):
+                    printc(" ".join(4*"O"), stdscr, pair=1, yoffset=1+j)
+                    stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+2*cursor_pos[1]-1, "*", curses.color_pair(1))
+                    stdscr.refresh()
+            else:
+                for j in range(4):
+                    printc(4*"O", stdscr, pair=1, yoffset=1+j)
+                    stdscr.addch(upper_left[0]+cursor_pos[0], upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
+                    stdscr.refresh()
             key = stdscr.getch()
+           
             if key == curses.KEY_UP:
                 cursor_pos[0] = max(0, cursor_pos[0]-1)
             elif key == curses.KEY_DOWN:
