@@ -269,14 +269,19 @@ def recall_prompt(locations, square=False):
         key = ""
         cursor_pos = [0, 0]
         rows, cols = stdscr.getmaxyx()
+        if cols%2 == 0:
+            xoffset = 2
+        else:
+            xoffset = 1
         upper_left = [rows//2+1, (cols-4)//2]
         commands = (ord(" "), ord("\n"))
+        
         while key not in commands:
             if square:
                 for j in range(4):
                     printc(" ".join(4*"O"), stdscr, pair=1, yoffset=1+j)
                     stdscr.addch(upper_left[0]+cursor_pos[0],
-                                 upper_left[1]+2*cursor_pos[1]-1, "*", curses.color_pair(1))
+                                 upper_left[1]+2*cursor_pos[1]-xoffset, "*", curses.color_pair(1))
                     stdscr.refresh()
             else:
                 for j in range(4):
