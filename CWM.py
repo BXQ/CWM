@@ -50,6 +50,7 @@ def main():
     parser.add_argument("--square", action="store_true")
     parser.add_argument("--sym_square", action="store_true")
     parser.add_argument("--loc_first", action="store_true")
+    parser.add_argument("--sym_time", default=0, type=float)
     args = parser.parse_args()
     logfile = args.log
 
@@ -68,7 +69,8 @@ def main():
             prev_results.append(task(level,
                                      square=args.square,
                                      sym_square=args.sym_square,
-                                 loc_first=args.loc_first))
+                                 loc_first=args.loc_first,
+                                 sym_time=args.sym_time))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -108,7 +110,7 @@ def printc(message, window, pair=0, yoffset=0, attribute=0, xoffset=0):
                   curses.color_pair(pair) | attribute)
     window.refresh()
                          
-def task(level, square=False, sym_square=False, loc_first=False):
+def task(level, square=False, sym_square=False, loc_first=False, sym_time=0):
     """Performs the complex working memory span task at a given level"""
     result = True
     locations = list()
@@ -116,10 +118,10 @@ def task(level, square=False, sym_square=False, loc_first=False):
         for i in range(level):
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
-            result =  symmetry_tasks(square=sym_square) and result
+            result =  symmetry_tasks(square=sym_square, time_limit=sym_time) and result
     else:
         for i in range(level):
-            result =  symmetry_tasks(square=sym_square) and result
+            result =  symmetry_tasks(square=sym_square, time_limit=sym_time) and result
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
     result = recall_prompt(locations, square=square) and result
@@ -159,36 +161,46 @@ def begin_prompt(level):
                    stdscr, yoffset=9, pair=1)
             
         
-def symmetry_tasks(square=False):
+def symmetry_tasks(square=False, time_limit=0):
     """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
     result = True
-    for i in range(3):
-        symmetrical = random.randint(0, 1)
-        if symmetrical:
-            display_matrix(generate_symmetrical(), square=square)
-        else:
-            display_matrix(generate_asymmetrical(), square=square)
+    if time_limit > 0:
+        start=time.time()
+        while(time.time() < start+time_limit):
+            result = symmetry_prompt(square=square) and result
+    else:
+        for i in range(3):
+            result = symmetry_prompt(square=square) and result
+    return result
+
+def symmetry_prompt(square=False):
+    result = True
+    symmetrical = random.randint(0, 1)
+    if symmetrical:
+        display_matrix(generate_symmetrical(), square=square)
+    else:
+        display_matrix(generate_asymmetrical(), square=square)
                                 
-        key = ""
-        printc("Is this pattern symmetrical?", stdscr, pair=1, yoffset=8)
-        printc("y/n", stdscr, pair=1, yoffset=9)
-        commands = (ord("y"), ord("n"), curses.KEY_LEFT, curses.KEY_RIGHT)
-        ans = ""
-        while(key not in commands):
-            key = stdscr.getch()
-            if key == ord("y") or key == curses.KEY_RIGHT:
-                result = result and symmetrical
-                ans = "y"
+    key = ""
+    printc("Is this pattern symmetrical?", stdscr, pair=1, yoffset=8)
+    printc("y/n", stdscr, pair=1, yoffset=9)
+    commands = (ord("y"), ord("n"), curses.KEY_LEFT, curses.KEY_RIGHT)
+    ans = ""
+    while(key not in commands):
+        key = stdscr.getch()
+        if key == ord("y") or key == curses.KEY_RIGHT:
+            result = result and symmetrical
+            ans = "y"
                     
                 
-            if key == ord("n") or key == curses.KEY_LEFT:
-                result = result and not symmetrical
-                ans = "n"
+        if key == ord("n") or key == curses.KEY_LEFT:
+            result = result and not symmetrical
+            ans = "n"
                 
-            if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical):
-                printc("Right", stdscr, pair=1, yoffset=9)
-            elif key in commands:
-                printc("Wrong", stdscr, pair=1, yoffset=9)
+        if (ans == "y" and symmetrical) or (ans == "n" and not symmetrical):
+            printc("Right", stdscr, pair=1, yoffset=9)
+        elif key in commands:
+            printc("Wrong", stdscr, pair=1, yoffset=9)
         time.sleep(.5)
         fill_window(stdscr, " ", pair=1)
     return result
