@@ -118,10 +118,12 @@ def task(level, square=False, sym_square=False, loc_first=False, sym_time=0):
         for i in range(level):
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
-            result =  symmetry_tasks(square=sym_square, time_limit=sym_time) and result
+            result =  symmetry_tasks(square=sym_square,
+                                     time_limit=sym_time) and result
     else:
         for i in range(level):
-            result =  symmetry_tasks(square=sym_square, time_limit=sym_time) and result
+            result =  symmetry_tasks(square=sym_square,
+                                     time_limit=sym_time)and result
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
     result = recall_prompt(locations, square=square) and result
@@ -165,7 +167,7 @@ def symmetry_tasks(square=False, time_limit=0):
     """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
     result = True
     if time_limit > 0:
-        start=time.time()
+        start = time.time()
         while(time.time() < start+time_limit):
             result = symmetry_prompt(square=square) and result
     else:
@@ -290,7 +292,7 @@ def recall_prompt(locations, square=False):
         key = ""
         cursor_pos = [0, 0]
         rows, cols = stdscr.getmaxyx()
-        if cols%2 == 0:
+        if cols % 2 == 0:
             xoffset = 2
         else:
             xoffset = 1
@@ -302,13 +304,15 @@ def recall_prompt(locations, square=False):
                 for j in range(4):
                     printc(" ".join(4*"O"), stdscr, pair=1, yoffset=1+j)
                     stdscr.addch(upper_left[0]+cursor_pos[0],
-                                 upper_left[1]+2*cursor_pos[1]-xoffset, "*", curses.color_pair(1))
+                                 upper_left[1]+2*cursor_pos[1]-xoffset,
+                                 "*", curses.color_pair(1))
                     stdscr.refresh()
             else:
                 for j in range(4):
                     printc(4*"O", stdscr, pair=1, yoffset=1+j)
                     stdscr.addch(upper_left[0]+cursor_pos[0],
-                                 upper_left[1]+cursor_pos[1], "*", curses.color_pair(1))
+                                 upper_left[1]+cursor_pos[1],
+                                 "*", curses.color_pair(1))
                     stdscr.refresh()
             key = stdscr.getch()
            
