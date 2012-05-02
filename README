@@ -29,11 +29,12 @@ The program comes with onscreen instructions, but the task is as follows: the us
 OPTIONS
 --------------
 Command line options for the program are as follows:
--l, --log    Set the log file to which the results of trials are printed. The default is .CWMlog.
--s, --start  Set the starting level (default is 2). This must be an integer >0.
---square     Display the locations and location recall prompt in a shape close to a square.
---sym_square Display the symmetry task matrices in a shape close to a square,
---loc_first  Start by displaying the first location before doing the first symmetry task.
+-l, --log    	     Set the log file to which the results of trials are printed. The default is .CWMlog.
+-s, --start [number] Set the starting level (default is 2). This must be an integer >0.
+--square     	     Display the locations and location recall prompt in a shape close to a square.
+--sym_square 	     Display the symmetry task matrices in a shape close to a square,
+--loc_first  	     Start by displaying the first location before doing the first symmetry task.
+--sym_time [number]  Use a timeout of number seconds for the symmetry task instead of a set number of repetitions.
 
 AUTHOR
 --------------
