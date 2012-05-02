@@ -49,6 +49,7 @@ def main():
                         default=2, type=int)
     parser.add_argument("--square", action="store_true")
     parser.add_argument("--sym_square", action="store_true")
+    parser.add_argument("--loc_first", action="store_true")
     args = parser.parse_args()
     logfile = args.log
 
@@ -65,7 +66,9 @@ def main():
             return 0
         else:
             prev_results.append(task(level,
-                                     square=args.square, sym_square=args.sym_square))
+                                     square=args.square,
+                                     sym_square=args.sym_square,
+                                 loc_first=args.loc_first))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -105,14 +108,20 @@ def printc(message, window, pair=0, yoffset=0, attribute=0, xoffset=0):
                   curses.color_pair(pair) | attribute)
     window.refresh()
                          
-def task(level, square=False, sym_square=False):
+def task(level, square=False, sym_square=False, loc_first=False):
     """Performs the complex working memory span task at a given level"""
     result = True
     locations = list()
-    for i in range(level):
-        result =  symmetry_tasks(square=sym_square) and result
-        locations.append(random.randint(0, 15))
-        display_location(locations[i], square=square)
+    if loc_first:
+        for i in range(level):
+            locations.append(random.randint(0, 15))
+            display_location(locations[i], square=square)
+            result =  symmetry_tasks(square=sym_square) and result
+    else:
+        for i in range(level):
+            result =  symmetry_tasks(square=sym_square) and result
+            locations.append(random.randint(0, 15))
+            display_location(locations[i], square=square)
     result = recall_prompt(locations, square=square) and result
     return result
 
