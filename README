@@ -35,6 +35,7 @@ Command line options for the program are as follows:
 --sym_square 	     Display the symmetry task matrices in a shape close to a square,
 --loc_first  	     Start by displaying the first location before doing the first symmetry task.
 --sym_time [number]  Use a timeout of number seconds for the symmetry task instead of a set number of repetitions.
+--sym_num [number]   Minumum number of symmetry tasks to be completed between each location display (default is 3). To do symmetry tasks based soley on a timeout (no Minumum number), set this to 0. 
 
 AUTHOR
 --------------
