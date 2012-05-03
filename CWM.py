@@ -166,7 +166,7 @@ def begin_prompt(level):
             
         
 def symmetry_tasks(square=False, time_limit=0, num=3):
-    """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
+    """Gives the user symmetry tasks to do with a specified timeout and/or minimum number of tasks"""
     result = True
     if time_limit > 0:
         start = time.time()
@@ -180,6 +180,7 @@ def symmetry_tasks(square=False, time_limit=0, num=3):
     return result
 
 def symmetry_prompt(square=False):
+    """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
     result = True
     symmetrical = random.randint(0, 1)
     if symmetrical:
