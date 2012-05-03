@@ -51,6 +51,7 @@ def main():
     parser.add_argument("--sym_square", action="store_true")
     parser.add_argument("--loc_first", action="store_true")
     parser.add_argument("--sym_time", default=0, type=float)
+    parser.add_argument("--sym_num", default=3, type=int)
     args = parser.parse_args()
     logfile = args.log
 
@@ -70,7 +71,8 @@ def main():
                                      square=args.square,
                                      sym_square=args.sym_square,
                                  loc_first=args.loc_first,
-                                 sym_time=args.sym_time))
+                                 sym_time=args.sym_time,
+                                 sym_num=args.sym_num))
             prev_trials += 1
             now = datetime.datetime.now()
             if prev_results[-1]:
@@ -110,7 +112,7 @@ def printc(message, window, pair=0, yoffset=0, attribute=0, xoffset=0):
                   curses.color_pair(pair) | attribute)
     window.refresh()
                          
-def task(level, square=False, sym_square=False, loc_first=False, sym_time=0):
+def task(level, square=False, sym_square=False, loc_first=False, sym_time=0, sym_num=3):
     """Performs the complex working memory span task at a given level"""
     result = True
     locations = list()
@@ -119,11 +121,11 @@ def task(level, square=False, sym_square=False, loc_first=False, sym_time=0):
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
             result =  symmetry_tasks(square=sym_square,
-                                     time_limit=sym_time) and result
+                                     time_limit=sym_time, num=sym_num) and result
     else:
         for i in range(level):
             result =  symmetry_tasks(square=sym_square,
-                                     time_limit=sym_time)and result
+                                     time_limit=sym_time, num=sym_num)and result
             locations.append(random.randint(0, 15))
             display_location(locations[i], square=square)
     result = recall_prompt(locations, square=square) and result
@@ -163,15 +165,17 @@ def begin_prompt(level):
                    stdscr, yoffset=9, pair=1)
             
         
-def symmetry_tasks(square=False, time_limit=0):
+def symmetry_tasks(square=False, time_limit=0, num=3):
     """Prompts the user to determine the symmetry of 3 random 8x8 matrices"""
     result = True
     if time_limit > 0:
         start = time.time()
-        while(time.time() < start+time_limit):
+        i = 0
+        while(time.time() < start+time_limit or i<num):
             result = symmetry_prompt(square=square) and result
+            i = i+1
     else:
-        for i in range(3):
+        for i in range(num):
             result = symmetry_prompt(square=square) and result
     return result
 
